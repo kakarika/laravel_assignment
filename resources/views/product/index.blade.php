@@ -30,9 +30,9 @@
                     <td>{{ $p->price }}</td>
                     <td>
                         @if ($p->status === 0)
-                            Completed
+                            <button class="btn btn-success">Completed</button>
                         @else
-                            Incomplete
+                            <button class="btn btn-danger">Incomplete</button>
                         @endif
                     </td>
                 </tr>
