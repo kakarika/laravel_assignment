@@ -11,6 +11,42 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-        return view('product.index', compact('products'));
+        return view('products.index', compact('products'));
+    }
+
+    public function create()
+    {
+        return view('products.create');
+    }
+
+    public function store(Request $request)
+    {
+        Product::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('products.index');
+    }
+
+    public function edit($id)
+    {
+        $product = Product::find($id);
+
+        return view('products.edit', compact('product'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        Product::where('id', $id)->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('products.index');
     }
 }

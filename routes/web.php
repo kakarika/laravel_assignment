@@ -19,4 +19,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/product', [ProductController::class, 'index']);
+Route::group(['prefix' => 'products'], function () {
+    Route::get('/', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/store', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    Route::post('/{id}/update', [ProductController::class, 'update'])->name('products.update');
+});
