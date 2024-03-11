@@ -13,11 +13,19 @@
 </head>
 
 <body class="bg-slate-600">
-    <a href="{{ route('articles.create') }}">
-        <button type="button"
-            class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-10 py-2.5 m-5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Create</button>
+    <div class="flex">
+        <a href="{{ route('articles.create') }}">
+            <button type="button"
+                class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-10 py-2.5 m-5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Create</button>
 
-    </a>
+        </a>
+
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit"
+                class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-10 py-2.5 m-5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Logout</button>
+        </form>
+    </div>
 
     <div class="flex flex-wrap items-start w-5/6 m-auto">
         @foreach ($articles as $a)
