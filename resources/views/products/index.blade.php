@@ -1,20 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Products</title>
-    @vite('resources/css/app.css')
-</head>
-
-<body>
+@extends('layouts.master')
+@section('content')
     <div class="flex">
         <a href="{{ route('products.create') }}">
             <button type="button"
                 class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-10 py-2.5 m-5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Create</button>
+        </a>
 
+        <a href="{{ route('dashboard') }}">
+            <button type="button"
+                class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-10 py-2.5 m-5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Home</button>
         </a>
 
         <form action="{{ route('logout') }}" method="POST">
@@ -27,6 +21,9 @@
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Image
+                    </th>
                     <th scope="col" class="px-6 py-3">
                         ID
                     </th>
@@ -50,8 +47,10 @@
             <tbody>
                 @foreach ($products as $p)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <th scope="row"
-                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <td class="px-6 py-4">
+                            <img src="{{ asset('storage/products/' . $p->image) }}" alt="" width="150px">
+                        </td>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $p->id }}
                         </th>
                         <td class="px-6 py-4">
@@ -86,6 +85,4 @@
             </tbody>
         </table>
     </div>
-</body>
-
-</html>
+@endsection

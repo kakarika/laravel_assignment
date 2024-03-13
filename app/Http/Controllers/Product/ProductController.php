@@ -21,11 +21,15 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        $imageName = time() . '.' . $request->image->getClientOriginalExtension();
+        $request->image->move(public_path('storage/products'), $imageName);
+
         Product::create([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
             'status' => $request->status,
+            'image' => $imageName,
         ]);
 
         return redirect()->route('products.index');

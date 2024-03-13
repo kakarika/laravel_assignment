@@ -27,6 +27,7 @@ class ArticleStoreRequest extends FormRequest
             'slug' => ['required', 'string', Rule::unique('articles', 'slug')->ignore($this->route('article'))],
             'context' => ['required', 'string'],
             'excerpt' => ['required', 'string'],
+            'images.*' => ['required', 'image'],
         ];
     }
 }
