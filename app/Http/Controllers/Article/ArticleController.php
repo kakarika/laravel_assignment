@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Article;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ArticleStoreRequest;
 use App\Models\Article;
 use Illuminate\Http\Request;
+use App\Models\ArticleImages;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ArticleStoreRequest;
 
 class ArticleController extends Controller
 {
@@ -15,8 +16,9 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::orderBy('id', 'desc')->get();
+        $images = ArticleImages::get();
 
-        return view('articles.index', compact('articles'));
+        return view('articles.index', compact('articles', 'images'));
     }
 
     /**
@@ -33,8 +35,16 @@ class ArticleController extends Controller
     public function store(ArticleStoreRequest $request)
     {
         $article = $request->validated();
+        $article = Article::create($article);
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('storage/articles'), $imageName);
+                $article->images()->create(['image' => $imageName]);
+            }
+        }
+        // dd($article);
 
-        Article::create($article);
         return redirect()->route('articles.index');
     }
 

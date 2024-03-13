@@ -20,6 +20,11 @@
 
         </a>
 
+        <a href="{{ route('dashboard') }}">
+            <button type="button"
+                class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-10 py-2.5 m-5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Home</button>
+        </a>
+
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit"
@@ -31,12 +36,24 @@
         @foreach ($articles as $a)
             <div
                 class="max-w-md p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 m-4">
+                @foreach ($images as $i)
+                    @if ($a->id == $i->article_id)
+                        <img src="{{ asset('storage/articles/' . $i->image) }}"class="rounded-lg mb-2" alt=""
+                            width="100px">
+                    @endif
+                @endforeach
                 <div class="flex items-center justify-between">
                     <a href="{{ route('articles.show', $a->id) }}">
                         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white me-5">
                             {{ $a->title }}
                         </h5>
                     </a>
+
+                    {{-- <div>
+                        @foreach ($images as $i)
+                            <img src="{{ asset('storage/articles/' . $i->image) }}" alt="Article Image">
+                        @endforeach
+                    </div> --}}
                     <form action="{{ route('articles.destroy', $a->id) }}" method="POST">
                         @csrf
                         @method('DELETE')

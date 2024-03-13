@@ -17,7 +17,7 @@
               dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Articles</button>
 
     </a>
-    <form action="{{ route('articles.store') }}" method="POST" class="max-w-md mx-auto">
+    <form action="{{ route('articles.store') }}" method="POST" class="max-w-md mx-auto" enctype="multipart/form-data">
         @csrf
         <div class="mb-5">
             <label for="title" class="block mb-2 text-sm font-medium">Title</label>
@@ -34,6 +34,13 @@
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Slug">
             @error('slug')
+                <span class="text-red-600 text-s">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="mb-5">
+            <label for="images" class="block mb-2 text-sm font-medium">Images</label>
+            <input type="file" id="images" name="images[]" multiple>
+            @error('images')
                 <span class="text-red-600 text-s">{{ $message }}</span>
             @enderror
         </div>
