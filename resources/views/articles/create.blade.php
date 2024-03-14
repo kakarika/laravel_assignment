@@ -43,6 +43,9 @@
             @error('images')
                 <span class="text-red-600 text-s">{{ $message }}</span>
             @enderror
+            @error('images.*')
+                <span class="text-red-600 text-s">{{ $message }}</span>
+            @enderror
         </div>
         <div class="mb-5">
             <label for="excerpt" class="block mb-2 text-sm font-medium">Excerpt</label>

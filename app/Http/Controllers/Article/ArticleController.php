@@ -15,10 +15,9 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::orderBy('id', 'desc')->get();
-        $images = ArticleImages::get();
-
-        return view('articles.index', compact('articles', 'images'));
+        $articles = Article::with('images')->orderBy('id', 'desc')->get();
+        // dd($articles);
+        return view('articles.index', compact('articles'));
     }
 
     /**
@@ -35,6 +34,7 @@ class ArticleController extends Controller
     public function store(ArticleStoreRequest $request)
     {
         $article = $request->validated();
+        // dd($article);
         $article = Article::create($article);
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {

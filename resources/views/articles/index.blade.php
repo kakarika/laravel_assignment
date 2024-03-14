@@ -36,11 +36,15 @@
         @foreach ($articles as $a)
             <div
                 class="max-w-md p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 m-4">
-                @foreach ($images as $i)
+                {{-- @foreach ($images as $i)
                     @if ($a->id == $i->article_id)
                         <img src="{{ asset('storage/articles/' . $i->image) }}"class="rounded-lg mb-2" alt=""
                             width="100px">
                     @endif
+                @endforeach --}}
+                @foreach ($a->images as $image)
+                    <img src="{{ asset('storage/articles/' . $image->image) }}" alt="" class="rounded-lg mb-2"
+                        width="100px">
                 @endforeach
                 <div class="flex items-center justify-between">
                     <a href="{{ route('articles.show', $a->id) }}">
