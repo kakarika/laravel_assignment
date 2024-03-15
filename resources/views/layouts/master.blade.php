@@ -281,13 +281,11 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <form action="{{ route('logout') }}" class="dropdown-item" method="POST">
-                                    @csrf
-                                    <button class="btn btn-danger">
-                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Logout
-                                    </button>
-                                </form>
+                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                    data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
                             </div>
                         </li>
 
@@ -331,8 +329,14 @@
                     </div>
                     <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="login.html">Logout</a>
+                        <button class="btn" type="button" data-dismiss="modal" class="inline">Cancel</button>
+                        <form action="{{ route('logout') }}" class="dropdown-item" method="POST" class="inline">
+                            @csrf
+                            <button class="btn btn-danger inline">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
