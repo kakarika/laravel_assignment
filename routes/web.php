@@ -4,7 +4,9 @@ use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Article\ArticleController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Product\ProductController;
+use App\Http\Controllers\User\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +37,10 @@ Route::middleware([Authenticate::class])->group(function () {
     });
 
     Route::resource('articles', ArticleController::class);
+
+    Route::group(['prefix' => 'users'], function () {
+        Route::resource('users', UserController::class);
+    });
 });
 
 Route::middleware('auth')->group(function () {

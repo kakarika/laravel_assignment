@@ -38,7 +38,7 @@ class ArticleController extends Controller
         $article = Article::create($article);
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
                 $image->move(public_path('storage/articles'), $imageName);
                 $article->images()->create(['image' => $imageName]);
             }
