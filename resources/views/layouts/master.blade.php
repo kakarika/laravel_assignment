@@ -20,6 +20,14 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
+    <!-- Bootstrap CDN CSS Link	 -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- Bootstrap-select CDN CSS LINK -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.12/dist/css/bootstrap-select.min.css">
+
     @vite('resources/css/app.css')
 
 </head>
@@ -69,6 +77,18 @@
                 <a class="nav-link" href="{{ route('users.index') }}">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Users</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('roles.index') }}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Roles</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('permissions.index') }}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Permissions</span></a>
             </li>
 
             <!-- Divider -->
@@ -261,8 +281,8 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span
-                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
+                                {{-- <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span> --}}
                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -343,8 +363,8 @@
         </div>
 
         <!-- Bootstrap core JavaScript-->
-        <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
-        <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        {{-- <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script> --}}
 
         <!-- Core plugin JavaScript-->
         <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
@@ -359,6 +379,30 @@
         <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
         <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
 
-</body>
+        <!-- Bootstrap CDN JS Link -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+        </script>
 
-</html>
+        <!-- Bootstrap-select CDN JS LINK -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.12/dist/js/bootstrap-select.min.js"></script>
+
+        <!-- Bootstrap-Select Custom JS LINK-->
+        <script type="text/javascript">
+            $('.selectpicker').on('changed.bs.select', function(e, clickedIndex, isSelected, previousValue) {
+                if (e.target.options[clickedIndex].selected) {
+                    console.log(e.target.options[clickedIndex].value);
+                }
+            });
+
+            <
+            /body>
+
+            <
+            /html>

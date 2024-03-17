@@ -1,8 +1,8 @@
 @extends('layouts.master')
 
 @section('content')
-    <a href="{{ route('users.create') }}">create</a>
-    <table>
+    <a href="{{ route('users.create') }}" class="btn bg-info text-white ms-4">create</a>
+    <table class="table table-info w-75 m-auto">
         <thead>
             <tr>
                 <th>ID</th>
@@ -14,7 +14,7 @@
         <tbody>
             @foreach ($users as $user)
                 <tr>
-                    <td>{{ $user->id }}</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>

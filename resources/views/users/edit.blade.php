@@ -19,20 +19,6 @@
                 <span>{{ $message }}</span>
             @enderror
         </div>
-        <div>
-            <label for="">Password</label>
-            <input type="password" name="password" placeholder="password">
-            @error('password')
-                <span>{{ $message }}</span>
-            @enderror
-        </div>
-        <div>
-            <label for="">Confirm Password</label>
-            <input type="password" name="password_confirmation" placeholder="confirm password">
-            @error('password_confirmation')
-                <span>{{ $message }}</span>
-            @enderror
-        </div>
-        <button type="submit">Register</button>
+        <button type="submit">Update</button>
     </form>
 @endsection
