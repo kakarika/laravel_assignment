@@ -7,14 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
+use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Validation\Rules\Password;
-use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -23,6 +24,9 @@ class UserController extends Controller
      */
     public function index()
     {
+        if (!Gate::allows('user_list')) {
+            return abort(401);
+        }
         $users = User::all();
         return view('users.index', compact('users'));
     }
@@ -32,6 +36,9 @@ class UserController extends Controller
      */
     public function create()
     {
+        if (!Gate::allows('user_create')) {
+            return abort(401);
+        }
         $roles = Role::all();
         return view('users.create', compact('roles'));
     }
@@ -41,6 +48,9 @@ class UserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        if (!Gate::allows('user_create')) {
+            return abort(401);
+        }
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
@@ -76,6 +86,9 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
+        if (!Gate::allows('user_edit')) {
+            return abort(401);
+        }
         $user = User::where('id', $id)->first();
         return view('users.edit', compact('user'));
     }
@@ -111,6 +124,9 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
+        if (!Gate::allows('user_delete')) {
+            return abort(401);
+        }
         User::where('id', $id)->delete();
         return redirect()->route('users.index');
     }
