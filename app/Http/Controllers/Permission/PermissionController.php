@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Permission;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
@@ -13,6 +14,9 @@ class PermissionController extends Controller
      */
     public function index()
     {
+        if (!Gate::allows('permission_list')) {
+            return abort(401);
+        }
         $permissions = Permission::all();
         return view('permissions.index', compact('permissions'));
     }
@@ -22,6 +26,9 @@ class PermissionController extends Controller
      */
     public function create()
     {
+        if (!Gate::allows('permission_create')) {
+            return abort(401);
+        }
         return view('permissions.create');
     }
 
@@ -30,6 +37,9 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Gate::allows('permission_create')) {
+            return abort(401);
+        }
         $request->validate([
             'name' => 'required',
         ]);

@@ -2,20 +2,27 @@
 
 namespace App\Http\Controllers\Product;
 
-use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
     public function index()
     {
+        if (!Gate::allows('product_list')) {
+            return abort(401);
+        }
         $products = Product::all();
         return view('products.index', compact('products'));
     }
 
     public function create()
     {
+        if (!Gate::allows('product_create')) {
+            return abort(401);
+        }
         return view('products.create');
     }
 
@@ -37,6 +44,9 @@ class ProductController extends Controller
 
     public function edit($id)
     {
+        if (!Gate::allows('product_edit')) {
+            return abort(401);
+        }
         $product = Product::find($id);
 
         return view('products.edit', compact('product'));

@@ -6,6 +6,7 @@ use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Models\ArticleImages;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\ArticleStoreRequest;
 
 class ArticleController extends Controller
@@ -15,6 +16,9 @@ class ArticleController extends Controller
      */
     public function index()
     {
+        if (!Gate::allows('article_list')) {
+            return abort(401);
+        }
         $articles = Article::with('images')->orderBy('id', 'desc')->get();
         // dd($articles);
         return view('articles.index', compact('articles'));
@@ -25,6 +29,9 @@ class ArticleController extends Controller
      */
     public function create()
     {
+        if (!Gate::allows('article_create')) {
+            return abort(401);
+        }
         return view('articles.create');
     }
 
@@ -33,6 +40,10 @@ class ArticleController extends Controller
      */
     public function store(ArticleStoreRequest $request)
     {
+        if (!Gate::allows('article_create')) {
+            return abort(401);
+        }
+
         $article = $request->validated();
         // dd($article);
         $article = Article::create($article);
@@ -53,6 +64,9 @@ class ArticleController extends Controller
      */
     public function show(string $id)
     {
+        if (!Gate::allows('article_list')) {
+            return abort(401);
+        }
         $article = Article::where('id', $id)->first();
 
         return view('articles.show', compact('article'));
@@ -63,6 +77,9 @@ class ArticleController extends Controller
      */
     public function edit(string $id)
     {
+        if (!Gate::allows('article_edit')) {
+            return abort(401);
+        }
         $article = Article::where('id', $id)->first();
         return view('articles.edit', compact('article'));
     }
@@ -72,6 +89,9 @@ class ArticleController extends Controller
      */
     public function update(ArticleStoreRequest $request, string $id)
     {
+        if (!Gate::allows('article_edit')) {
+            return abort(401);
+        }
         $article = $request->validated();
         Article::where('id', $id)->update($article);
 
@@ -83,6 +103,9 @@ class ArticleController extends Controller
      */
     public function destroy(string $id)
     {
+        if (!Gate::allows('article_delete')) {
+            return abort(401);
+        }
         Article::where('id', $id)->delete();
 
         return redirect()->route('articles.index');
