@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Article\ArticleController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\Permission\PermissionController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Role\RoleController;
@@ -43,6 +44,7 @@ Route::middleware([Authenticate::class])->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('permissions', PermissionController::class);
+    Route::resource('employees', EmployeeController::class);
 });
 
 Route::middleware('auth')->group(function () {
