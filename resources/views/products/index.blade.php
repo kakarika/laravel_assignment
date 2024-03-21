@@ -21,11 +21,11 @@
     <form action="{{ route('products.index') }}" method="GET" class="w-25 ms-5">
         <div>
             <label for="from_date">From : </label>
-            <input type="date" id="from_date" name="from_date" class="form-control">
+            <input type="datetime-local" id="from_date" name="from_date" class="form-control">
         </div>
         <div>
             <label for="to">To : </label>
-            <input type="date" id="to_date" name="to_date" class="form-control">
+            <input type="datetime-local" id="to_date" name="to_date" class="form-control">
         </div>
         <button type="submit" class="btn bg-success text-white my-3">Search</button>
     </form>

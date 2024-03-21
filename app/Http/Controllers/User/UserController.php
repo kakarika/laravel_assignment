@@ -9,16 +9,28 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Http\Repositories\Role\RoleRepositoryInterface;
+use App\Http\Requests\UserRequest;
+use App\Http\Services\User\UserService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
+    private $userService;
+    private $roleRepository;
+
+    public function __construct(UserService $userService, RoleRepositoryInterface $roleRepository)
+    {
+        $this->userService = $userService;
+        $this->roleRepository = $roleRepository;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -27,7 +39,8 @@ class UserController extends Controller
         if (!Gate::allows('user_list')) {
             return abort(401);
         }
-        $users = User::all();
+
+        $users = $this->userService->index();
         return view('users.index', compact('users'));
     }
 
@@ -39,36 +52,24 @@ class UserController extends Controller
         if (!Gate::allows('user_create')) {
             return abort(401);
         }
-        $roles = Role::all();
+
+        $roles = $this->roleRepository->all();
+
         return view('users.create', compact('roles'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(UserRequest $request): RedirectResponse
     {
         if (!Gate::allows('user_create')) {
             return abort(401);
         }
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
-            'password' => ['required', 'confirmed', Password::defaults()],
-            'role_id' => 'required|string|min:1',
-        ]);
 
-        $role = Role::where('id', $request->role_id)->first();
+        $user = $this->userService->store($request->validated());
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        $user->assignRole($role);
-
-        // event(new Registered($user));
+        event(new Registered($user));
 
         return redirect(RouteServiceProvider::HOME);
     }
@@ -89,7 +90,9 @@ class UserController extends Controller
         if (!Gate::allows('user_edit')) {
             return abort(401);
         }
-        $user = User::where('id', $id)->first();
+
+        $user = $this->userService->editPage($id);
+        // $user = User::where('id', $id)->first();
         return view('users.edit', compact('user'));
     }
 
@@ -111,10 +114,7 @@ class UserController extends Controller
             ],
         ]);
 
-        User::where('id', $id)->update([
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
+        $this->userService->update($request->all(), $id);
 
         return redirect()->route('users.index');
     }
@@ -127,7 +127,8 @@ class UserController extends Controller
         if (!Gate::allows('user_delete')) {
             return abort(401);
         }
-        User::where('id', $id)->delete();
+        $this->userService->delete($id);
+
         return redirect()->route('users.index');
     }
 }
