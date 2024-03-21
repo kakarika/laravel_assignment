@@ -9,13 +9,23 @@ use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if (!Gate::allows('product_list')) {
             return abort(401);
         }
-        $products = Product::all();
-        return view('products.index', compact('products'));
+        $products = Product::query();
+
+        if ($request->filled('from_date') && $request->filled('to_date')) {
+            $fromDate = $request->from_date;
+            $toDate = $request->to_date;
+
+            $products->whereBetween('created_at', [$fromDate, $toDate]);
+        }
+
+        $products = $products->orderBy('id', 'desc')->paginate(5);
+        $filter = $request->only(['from_date', 'to_date']);
+        return view('products.index', compact('products', 'filter'));
     }
 
     public function create()

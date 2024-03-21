@@ -103,6 +103,12 @@
                 </li>
             @endcan
 
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('employees.index') }}">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Employees</span></a>
+            </li>
+
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
