@@ -92,8 +92,7 @@ class UserController extends Controller
             return abort(401);
         }
 
-        $user = $this->userService->editPage($id);
-        // $user = User::where('id', $id)->first();
+        $user = $this->userService->findUser($id);
         return view('users.edit', compact('user'));
     }
 
@@ -102,7 +101,8 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, string $id)
     {
-        $this->userService->update($request->validated(), $id);
+        $userId = $this->userService->findUser($id);
+        $this->userService->update($request->validated(), $userId->id);
 
         return redirect()->route('users.index');
     }
@@ -115,7 +115,8 @@ class UserController extends Controller
         if (!Gate::allows('user_delete')) {
             return abort(401);
         }
-        $this->userService->delete($id);
+        $userId = $this->userService->findUser($id);
+        $this->userService->delete($userId->id);
 
         return redirect()->route('users.index');
     }

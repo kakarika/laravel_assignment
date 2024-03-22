@@ -32,7 +32,7 @@ class UserService
         return $user->assignRole($role);
     }
 
-    public function editPage(int $id): User
+    public function findUser(int $id): User
     {
         return $this->userRepository->findUserId($id);
     }

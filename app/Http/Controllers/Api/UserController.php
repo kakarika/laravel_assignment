@@ -42,7 +42,8 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = $this->userService->update($request->all(), $id);
+        $userId = $this->userService->findUser($id);
+        $user = $this->userService->update($request->all(), $userId->id);
         return response()->json([
             'status' => 201,
             'message' => 'user updated',
@@ -52,7 +53,8 @@ class UserController extends Controller
 
     public function delete($id)
     {
-        $this->userService->delete($id);
+        $userId = $this->userService->findUser($id);
+        $this->userService->delete($userId->id);
 
         return response()->json([
             'status' => 200,
