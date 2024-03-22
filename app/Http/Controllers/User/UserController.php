@@ -9,16 +9,29 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Http\Repositories\Role\RoleRepositoryInterface;
+use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserUpdateRequest;
+use App\Http\Services\User\UserService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
+    private $userService;
+    private $roleRepository;
+
+    public function __construct(UserService $userService, RoleRepositoryInterface $roleRepository)
+    {
+        $this->userService = $userService;
+        $this->roleRepository = $roleRepository;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -27,7 +40,8 @@ class UserController extends Controller
         if (!Gate::allows('user_list')) {
             return abort(401);
         }
-        $users = User::all();
+
+        $users = $this->userService->index();
         return view('users.index', compact('users'));
     }
 
@@ -39,36 +53,24 @@ class UserController extends Controller
         if (!Gate::allows('user_create')) {
             return abort(401);
         }
-        $roles = Role::all();
+
+        $roles = $this->roleRepository->all();
+
         return view('users.create', compact('roles'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(UserRequest $request): RedirectResponse
     {
         if (!Gate::allows('user_create')) {
             return abort(401);
         }
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
-            'password' => ['required', 'confirmed', Password::defaults()],
-            'role_id' => 'required|string|min:1',
-        ]);
 
-        $role = Role::where('id', $request->role_id)->first();
+        $user = $this->userService->store($request->validated());
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        $user->assignRole($role);
-
-        // event(new Registered($user));
+        event(new Registered($user));
 
         return redirect(RouteServiceProvider::HOME);
     }
@@ -89,32 +91,18 @@ class UserController extends Controller
         if (!Gate::allows('user_edit')) {
             return abort(401);
         }
-        $user = User::where('id', $id)->first();
+
+        $user = $this->userService->findUser($id);
         return view('users.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserUpdateRequest $request, string $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' =>
-            [
-                'required',
-                'string',
-                'lowercase',
-                'email',
-                'max:255',
-                Rule::unique('users')->ignore($id),
-            ],
-        ]);
-
-        User::where('id', $id)->update([
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
+        $userId = $this->userService->findUser($id);
+        $this->userService->update($request->validated(), $userId->id);
 
         return redirect()->route('users.index');
     }
@@ -127,7 +115,9 @@ class UserController extends Controller
         if (!Gate::allows('user_delete')) {
             return abort(401);
         }
-        User::where('id', $id)->delete();
+        $userId = $this->userService->findUser($id);
+        $this->userService->delete($userId->id);
+
         return redirect()->route('users.index');
     }
 }

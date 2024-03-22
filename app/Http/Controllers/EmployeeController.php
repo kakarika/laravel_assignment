@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -12,8 +13,10 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Http::get(ENV('API_URL') . 'employees');
-        $response = json_decode($employees->body());
+        $client = new Client();
+        $employees = $client->request('GET', ENV('API_URL') . 'employees');
+        // $employees = Http::get(ENV('API_URL') . 'employees');
+        $response = json_decode($employees->getBody());
         $result = $response->data;
         // dd($result);
 
