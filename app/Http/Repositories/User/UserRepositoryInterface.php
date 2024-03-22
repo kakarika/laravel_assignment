@@ -3,16 +3,17 @@
 namespace App\Http\Repositories\User;
 
 use App\Models\User;
+use Illuminate\Support\Collection;
 
 interface UserRepositoryInterface
 {
-    public function getUser();
+    public function getUser(): Collection;
 
     public function create(array $params): User;
 
-    public function getSingleUser($id);
+    public function findUserId(int $id): User;
 
-    public function update(array $params, $id);
+    public function update(array $params, int $id);
 
-    public function delete($id);
+    public function delete(int $id);
 }

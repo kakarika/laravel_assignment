@@ -42,7 +42,6 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request->all());
         $user = $this->userService->update($request->all(), $id);
         return response()->json([
             'status' => 201,

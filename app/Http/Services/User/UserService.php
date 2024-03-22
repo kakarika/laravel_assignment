@@ -19,33 +19,30 @@ class UserService
         $this->roleRepository = $roleRepository;
     }
 
-    public function index()
+    public function index(): Collection
     {
         return $this->userRepository->getUser();
     }
 
-    public function store(array $params)
+    public function store(array $params): User
     {
         $role = $this->roleRepository->findId($params['role_id']);
 
         $user = $this->userRepository->create($params);
-
         return $user->assignRole($role);
     }
 
-    public function editPage($id)
+    public function editPage(int $id): User
     {
-        return $this->userRepository->getSingleUser($id);
+        return $this->userRepository->findUserId($id);
     }
 
-    public function update(array $params, $id)
+    public function update(array $params, int $id)
     {
-        $user = $this->userRepository->update($params, $id);
-        // dd($user);
         return $this->userRepository->update($params, $id);
     }
 
-    public function delete($id)
+    public function delete(int $id)
     {
         return $this->userRepository->delete($id);
     }
